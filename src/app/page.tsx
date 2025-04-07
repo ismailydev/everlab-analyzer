@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FileUpload } from "@/components/file-upload";
 import { ResultsDialog } from "@/components/results-dialog";
-import { AnalysisResult, AnalysisResponse } from "@/lib/types";
+import { AnalysisResult } from "@/lib/types";
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

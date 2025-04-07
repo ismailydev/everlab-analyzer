@@ -9,7 +9,6 @@ import {
 import { prepareAnalysisResponse } from "@/lib/result-analyzer";
 import { HL7Result } from "@/lib/types";
 import path from "path";
-import fs from "fs";
 
 export async function POST(request: NextRequest) {
   try {
