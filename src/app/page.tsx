@@ -3,10 +3,18 @@
 import { useState } from "react";
 import { FileUpload } from "@/components/file-upload";
 import { ResultsDialog } from "@/components/results-dialog";
-import { AnalysisResult } from "@/lib/types";
+import { AnalysisResult, AnalysisResponse } from "@/lib/types";
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [analysisResults, setAnalysisResults] = useState<AnalysisResult | null>(
+    null
+  );
+
+  const handleResults = (results: AnalysisResult) => {
+    setAnalysisResults(results);
+    setIsDialogOpen(true);
+  };
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -17,11 +25,12 @@ export default function Home() {
             Upload an ORU file to see analyzed test results
           </p>
         </div>
-        <FileUpload />
+        <FileUpload onResults={handleResults} />
       </div>
       <ResultsDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
+        results={analysisResults}
       />
     </main>
   );
