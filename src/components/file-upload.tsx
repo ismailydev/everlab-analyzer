@@ -28,29 +28,30 @@ export function FileUpload({ onResults }: FileUploadProps) {
       const formData = new FormData();
       formData.append("file", file);
 
-      const loadingToast = toast.loading("Analyzing HL7 file...");
+      toast.promise(
+        async () => {
+          const response = await fetch("/api/analyze", {
+            method: "POST",
+            body: formData,
+          });
 
-      try {
-        const response = await fetch("/api/analyze", {
-          method: "POST",
-          body: formData,
-        });
+          if (!response.ok) {
+            throw new Error("Failed to analyze file");
+          }
 
-        if (!response.ok) {
-          throw new Error("Failed to analyze file");
+          const data = await response.json();
+          onResults(data);
+          return data;
+        },
+        {
+          loading: "Analyzing HL7 file...",
+          success: "Analysis complete",
+          error: (err) =>
+            `Error: ${
+              err instanceof Error ? err.message : "Unknown error occurred"
+            }`,
         }
-
-        const data = await response.json();
-        onResults(data);
-
-        toast.success("Analysis complete");
-      } catch (err) {
-        const message =
-          err instanceof Error ? err.message : "Unknown error occurred";
-        toast.error(`Error: ${message}`);
-      } finally {
-        toast.dismiss(loadingToast);
-      }
+      );
     },
     [onResults]
   );
